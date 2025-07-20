@@ -3,8 +3,6 @@ from configparser import ConfigParser
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-
-
 file_config = Path(__file__).parent.joinpath('db.ini')
 config = ConfigParser()
 config.read(file_config)
