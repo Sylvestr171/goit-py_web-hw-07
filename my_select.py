@@ -103,8 +103,16 @@ def select_5(teacher):
     result = session.execute(stmt).mappings().all()
     return result
 # Знайти список студентів у певній групі.
-def select_6():
-    ...
+def select_6(group):
+    stmt = select(
+        Student.fullname
+        ).join(
+            Groups
+            ).where(
+                Groups.name==group
+                )
+    result = session.execute(stmt).mappings().all()
+    return result
 # Знайти оцінки студентів у окремій групі з певного предмета.
 def select_7():
     ...
@@ -142,3 +150,10 @@ if __name__ == '__main__':
         print(f'{i}) {subject.name};')
         i+=1
     
+    i=1
+    group='ІХФ-24'
+    print(f'Група {group}:')
+    for subject in select_6(group):
+        print(f'{i}) {subject.fullname};')
+        i+=1
+   
