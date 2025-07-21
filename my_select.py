@@ -169,8 +169,28 @@ def select_9(student):
     result = session.execute(stmt).all()
     return result
 # Список курсів, які певному студенту читає певний викладач.
-def select_10():
-    ...
+def select_10(student, teacher):
+    stmt = select(
+            Student.fullname,
+            func.array_agg(
+                func.distinct(Subjects.name)
+            ).label('subject_list'),
+        ).select_from(
+            Student
+        ).join(
+            Grades
+        ).join(
+            Subjects
+        ).join(
+            Teachers
+        ).where(
+            Student.fullname==student,
+            Teachers.fullname==teacher   
+        ).group_by(
+            Student.fullname
+        )
+    result = session.execute(stmt).all()
+    return result
 
 if __name__ == '__main__':
 
@@ -231,6 +251,16 @@ if __name__ == '__main__':
     student="Усик Опанас Лукʼянович"
     for fullname, subject_list in select_9(student):
         print(f"Студент {fullname} відвідує наступні курси:")
+        for ithem in subject_list:
+            print(f"{i}) {ithem}")
+            i+=1
+
+    print(">>>>> select_10")
+    i=1
+    student="Усик Опанас Лукʼянович"
+    teacher="Орхип Радченко"
+    for fullname, subject_list in select_10(student, teacher):
+        print(f"Студент {fullname} відвідує наступні курси викладача {teacher}:")
         for ithem in subject_list:
             print(f"{i}) {ithem}")
             i+=1
